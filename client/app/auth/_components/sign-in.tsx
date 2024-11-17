@@ -13,15 +13,18 @@ import { emailSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useAuth } from "@/hooks/useAuth";
 
 const SignIn = () => {
+  const {setEmail, setStep} = useAuth()
   const form = useForm<z.infer<typeof emailSchema>>({
     resolver: zodResolver(emailSchema),
     defaultValues: { email: "" },
   });
 
   function onSubmit(values: z.infer<typeof emailSchema>) {
-    console.log(values);
+    setStep('verify')
+    setEmail(values.email)
   }
   return (
     <div className="w-full">

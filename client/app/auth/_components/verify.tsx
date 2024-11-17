@@ -14,6 +14,7 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { useAuth } from "@/hooks/useAuth";
 import { otpSchema, emailSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
@@ -22,12 +23,14 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const Verify = () => {
+  const { email } = useAuth();
   const form = useForm<z.infer<typeof otpSchema>>({
     resolver: zodResolver(otpSchema),
-    defaultValues: { email: "", otp: "" },
+    defaultValues: { email, otp: "" },
   });
   function onSubmit(values: z.infer<typeof otpSchema>) {
-    console.log(values);
+    // Api call
+    window.open('/', '_self')
   }
   return (
     <div className="w-full">
@@ -48,6 +51,7 @@ const Verify = () => {
                 <FormLabel>Email:</FormLabel>
                 <FormControl>
                   <Input
+                    disabled
                     placeholder="example@gmail.com"
                     className="h-10"
                     {...field}
@@ -66,7 +70,11 @@ const Verify = () => {
                   One-Time Password
                 </FormLabel>
                 <FormControl>
-                  <InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS} {...field}>
+                  <InputOTP
+                    maxLength={6}
+                    pattern={REGEXP_ONLY_DIGITS}
+                    {...field}
+                  >
                     <InputOTPGroup className="w-full">
                       <InputOTPSlot
                         index={0}
@@ -102,7 +110,9 @@ const Verify = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full" size={"lg"}>Submit</Button>
+          <Button type="submit" className="w-full" size={"lg"}>
+            Submit
+          </Button>
         </form>
       </Form>
     </div>
